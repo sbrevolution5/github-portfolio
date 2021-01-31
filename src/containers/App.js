@@ -1,7 +1,7 @@
-import logo from './logo.svg';
+import logo from '../logo.svg';
 import './App.css';
-import '../components/App/Header';
-
+import Header from '../components/Header/Header.js';
+import Profile from './Profile.js' 
 function App() {
   return (
     <div className="App">

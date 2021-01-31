@@ -11,6 +11,7 @@ class Profile extends Component {
     async componentDidMount(){
         const profile = await fetch('https://api.github.com/users/sbrevolution5');
         const profileJSON = await profile.json()
+        console.log(profileJSON)
 
         if(profileJSON) {
             this.setState({
@@ -20,6 +21,10 @@ class Profile extends Component {
         }
     }
     render() {
+        const {data, loading} = this.state
+        if (loading){
+            return <div>Loading...</div>
+        }
         return (
             <div>
                 <ul>
