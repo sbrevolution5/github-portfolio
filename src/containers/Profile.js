@@ -16,6 +16,7 @@ class Profile extends Component {
         super();
         this.state = {
             data: {},
+            repositories: [],
             loading: true,
         }
     }
@@ -25,30 +26,37 @@ class Profile extends Component {
         console.log(profileJSON)
 
         if(profileJSON) {
+            const repositories = await fetch(profileJSON.repos_url);
+            const repositoriesJSON = await repositories.json();
             this.setState({
                 data:profileJSON,
+                repositories: repositoriesJSON,
                 loading: false,
             })
         }
     }
     render() {
-        const {data, loading} = this.state
+        const {data, loading, repositories} = this.state
         if (loading){
             return <div>Loading...</div>
         }
         const items = [
             { label: 'html_url', value: <Link url={data.html_url} title='Github URL' />},
-            { label: 'repos_url', value: <Link url={data.repos_url} />},
-            { label: 'name', value: <Link url={data.name} />},
-            { label: 'company', value: <Link url={data.company} />},       
-            { label: 'location', value: <Link url={data.location} />},
-            { label: 'email', value: <Link url={data.email} />},
-            { label: 'bio', value: <Link url={data.bio} />},
+            { label: 'name', value: data.name },
+            { label: 'company', value: data.company },       
+            { label: 'location', value: data.location },
+            { label: 'email', value: data.email },
+            { label: 'bio', value: data.bio },
         ]
+        const projects = repositories.map(repository => ({
+            label: repository.name,
+            value: <Link url={repository.html_url} title='Github URL' /> 
+        }));
         return (
             <ProfileWrapper>
                 <Avatar className='Profile-avatar' src={data.avatar_url} alt='avatar' />
-                <List items ={items}/>
+                <List title='Profile' items ={items}/>
+                <List title='Projects' items={projects} />
             </ProfileWrapper>
         )
     }
